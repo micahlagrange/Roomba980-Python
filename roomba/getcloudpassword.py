@@ -104,6 +104,15 @@ class irobotAuth:
                 "oauth_token": response.get('sessionInfo', {}).get('sessionToken', ''),
                 "targetEnv": "mobile"}
         '''
+
+        if response.get('statusCode') != 200:
+            if 'statusCode' in response and 'errorMessage' in response:
+                code = str(response['statusCode'])
+                error_message = str(response['errorMessage'])
+                message = 'Error code %s returned from %s, got: %s' % (code, self.gigyaBase, error_message)
+                print(message, file=sys.stderr)
+                sys.exit(1)
+
         uid = response['UID']
         uidSig = response['UIDSignature']
         sigTime = response['signatureTimestamp']
